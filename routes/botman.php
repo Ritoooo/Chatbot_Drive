@@ -1,9 +1,65 @@
 <?php
 use App\Http\Controllers\BotManController;
+use BotMan\BotMan\Middleware\ApiAi;
+use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 
 $botman = resolve('botman');
 
 $botman->hears('Hola', function ($bot) {
     $bot->reply('Hola! Soy Raphibot de Megaestruc, en qué puedo ayudarte?');
 });
+$botman->hears('ayuda', function ($bot) {
+    $bot->reply('Tenemos un gran catálogo de servicios');
+});
+$botman->hears('Productos', function ($bot) {
+    $bot->reply(Question::create('Te presento esta lista de categorías, seleccona el tipo de producto que buscas')->addButtons([
+    	Button::create('CARGA PALETIZADA')->value('carga_paletizada'),
+    	Button::create('PICKING')->value('picking'),
+    	Button::create('MUEBLES METALICOS')->value('mueble_metalico'),
+    	Button::create('ESTRUCTURA ESPECIAL')->value('estructura_especial'),
+    ]));
+});
+$botman->hears('carga_paletizada', function ($bot) {
+    $bot->reply('Elejiste carga_paletizada');
+});
+$botman->hears('picking', function ($bot) {
+    $bot->reply('Elejiste');
+});
+$botman->hears('mueble_metalico', function ($bot) {
+    $bot->reply('Elejiste mueble_metalico');
+});
+$botman->hears('estructura_especial', function ($bot) {
+    $bot->reply('Elejiste estructura_especial');
+});
+
+
+
+
+
+
+
+
+
+
+
 $botman->hears('Start conversation', BotManController::class.'@startConversation');
+
+
+
+/*
+$dialogflow = ApiAi::create('0f9adfb0ad9549adaccb8069b24eba9d')->listenForAction();
+
+// Apply global "received" middleware
+$botman->middleware->received($dialogflow);
+$botman->hears('input.help', function (BotMan $bot) {
+    
+    $extras = $bot->getMessage()->getExtras();
+    $apiReply = $extras['apiReply'];
+    $apiAction = $extras['apiAction'];
+    $apiIntent = $extras['apiIntent'];
+    
+    $bot->reply($apiReply);
+     
+})->middleware($dialogflow);*/
