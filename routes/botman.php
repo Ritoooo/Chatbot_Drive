@@ -48,7 +48,7 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 
 
-/*
+
 $dialogflow = ApiAi::create('0f9adfb0ad9549adaccb8069b24eba9d')->listenForAction();
 
 // Apply global "received" middleware
@@ -62,4 +62,4 @@ $botman->hears('input.help', function (BotMan $bot) {
     
     $bot->reply($apiReply);
      
-})->middleware($dialogflow);*/
+})->middleware($dialogflow);
