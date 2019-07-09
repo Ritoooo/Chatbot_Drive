@@ -16,24 +16,10 @@ class BotManController extends Controller
         $botman = app('botman');
 
         $botman->listen();
-
-        
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function tinker()
-    {
-        return view('tinker');
-    }
+    public function tinker()    {   return view('tinker');    }
 
-    /**
-     * Loaded through routes/botman.php
-     * @param  BotMan $bot
-     */
-    public function startConversation(BotMan $bot)
-    {
-        $bot->startConversation(new ExampleConversation());
-    }
+    public function startConversation(BotMan $bot)    { $bot->startConversation(new ExampleConversation());    }
+    public function solicitarProducto(BotMan $bot)    { $bot->startConversation(new ExampleConversation());    }
 }

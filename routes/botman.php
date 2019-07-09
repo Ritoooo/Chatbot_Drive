@@ -7,6 +7,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
+
 $botman = resolve('botman');
 
 $botman->hears('Hola', function ($bot) {
@@ -62,6 +63,12 @@ $botman->hears('input.help', function (BotMan $bot) {
     $apiAction = $extras['apiAction'];
     $apiIntent = $extras['apiIntent'];
     
+    $bot->reply(Question::create('Te presento esta lista de categorías, seleccona el tipo de producto que buscas')->addButtons([
+        Button::create('CARGA PALETIZADA')->value('carga_paletizada'),
+        Button::create('PICKING')->value('picking'),
+        Button::create('MUEBLES METALICOS')->value('mueble_metalico'),
+        Button::create('ESTRUCTURA ESPECIAL')->value('estructura_especial'),
+    ]));
     $bot->reply($apiReply);
      
 })->middleware($dialogflow);
@@ -71,16 +78,47 @@ $botman->hears('input.carga_paletizada', function (BotMan $bot) {
     
     $attachment = new Image('http://www.megaestruc.com/images/RACK%20CONVENCIONAL/rc1.jpg');
 
-    // Build message object
     $message = OutgoingMessage::create('This is my text')
                 ->withAttachment($attachment);
 
-    // Reply message object
     $extras = $bot->getMessage()->getExtras();
-    //$apiReply = $extras['apiEntity'];
     $apiReply = $extras['apiReply'];
     $apiAction = $extras['apiAction'];
     $apiIntent = $extras['apiIntent'];
+
+    $apiParameters = $extras['apiParameters'];
+    if ($extras['apiParameters']) {
+        $producto = $apiParameters['producto'];
+        if ($producto) {
+            $bot->reply("{$producto}");
+        }
+    }
+    
+    $bot->reply($message);
+     
+})->middleware($dialogflow);
+
+$botman->middleware->received($dialogflow);
+$botman->hears('input.cotizar', function (BotMan $bot) {
+    
+    $attachment = new Image('http://www.megaestruc.com/images/RACK%20CONVENCIONAL/rc1.jpg');
+
+    $message = OutgoingMessage::create('This is my text')
+                ->withAttachment($attachment);
+
+    $extras = $bot->getMessage()->getExtras();
+    $apiReply = $extras['apiReply'];
+    $apiAction = $extras['apiAction'];
+    $apiIntent = $extras['apiIntent'];
+
+    $apiParameters = $extras['apiParameters'];
+    if ($extras['apiParameters']) {
+        
+        if ($apiParameters['phone-number']) {
+            $telefono = $apiParameters['phone-number'];
+            $bot->reply("HOLAAA {$telefono}");
+        }
+    }
     
     $bot->reply($message);
      

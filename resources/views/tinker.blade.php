@@ -8,6 +8,7 @@
     <title>BotMan Studio</title>
 
     <!-- Fonts -->
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
