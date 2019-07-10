@@ -10,7 +10,12 @@ class ProductController extends Controller
 
     public function index()
     {
-        return Product::all();
+        $i=0;
+        $producto = Product::select('nombre')->get();
+        foreach ($producto as $key => $value) {
+            echo $value;
+        }
+        return $producto;
     }
 
     public function create()
