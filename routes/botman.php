@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\BotManController;
+use App\Http\Controllers\GoogleDriveController;
 use BotMan\BotMan\Middleware\ApiAi;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -35,6 +36,7 @@ $botman->hears('estructura_especial', function ($bot) {
 
 
 
+$botman->hears('hilos', GoogleDriveController::class.'@startConversation');
 
 
 
