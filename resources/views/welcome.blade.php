@@ -55,14 +55,9 @@
 <div class="container">
     
     <table>
-        <tr><td><h2 style="font-family: Varela Round;  color: white">Ptoyecto final de Sistemas Inteligentes</h2></td></tr>
-        <tr><td style="font-family: Varela Round;  color: white">Integrantes</td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Cahuana Prado Miguel</b></td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Cahuana Román Alexander</b></td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Luján Javier Diego</b></td></tr>
+        <tr><td><h2 style="font-family: Varela Round;  color: white">Chatbot <br><br> Google Sheets / Jira</h2></td></tr>
+        <tr><td style="font-family: Varela Round;  color: white">Integrante</td></tr>
         <tr><td style="font-family: Varela Round;  color: black"><b>Orellana Aliano Roberto</b></td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Samaniego Gutiérrez Anthony</b></td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Sotelo Samaniego Roberto</b></td></tr>
     </table>
     <div class="content">
         <div class="logo">

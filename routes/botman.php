@@ -81,32 +81,22 @@ $botman->hears('input.help', function (BotMan $bot) {
      
 })->middleware($dialogflow);
 
-$botman->middleware->received($dialogflow);
-$botman->hears('input.carga_paletizada', function (BotMan $bot) {
-    
-    $attachment = new Image('http://www.megaestruc.com/images/RACK%20CONVENCIONAL/rc1.jpg');
+//$botman->hears('input.user_ask_info', GoogleDriveController::class.'infoConversation');
 
-    $message = OutgoingMessage::create('')
-                ->withAttachment($attachment);
+$botman->hears('input.user_ask_info', function (BotMan $bot) {
 
     $extras = $bot->getMessage()->getExtras();
     $apiReply = $extras['apiReply'];
     $apiAction = $extras['apiAction'];
     $apiIntent = $extras['apiIntent'];
-
-    $apiParameters = $extras['apiParameters'];
-    if ($extras['apiParameters']) {
-        $producto = $apiParameters['producto'];
-        if ($producto) {
-            $bot->reply("Qué deseas saber sobre {$producto}?");
-        }
-    }
-    
-    $bot->reply($message);
      
+    $bot->reply(Question::create('Tengo datos de:')->addButtons([
+        Button::create('Google')->value('google'),
+        Button::create('Jira')->value('jira'),
+    ]));
+
 })->middleware($dialogflow);
 
-$botman->middleware->received($dialogflow);
 $botman->hears('input.cotizar', function (BotMan $bot) {
     
     $attachment = new Image('http://www.megaestruc.com/images/RACK%20CONVENCIONAL/rc1.jpg');

@@ -23,4 +23,5 @@ class GoogleDriveController extends Controller
 
     public function startConversation(BotMan $bot)    { $bot->startConversation(new SaludoConversation());    }
     public function saludar(BotMan $bot)    { $bot->startConversation(new ExampleConversation());    }
+    public function info(BotMan $bot)    { $bot->startConversation(new ExampleConversation());    }
 }
