@@ -6,6 +6,9 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use App\Product;
 use App\TypeProduct;
@@ -14,7 +17,7 @@ use App\TypeProduct;
 $botman = resolve('botman');
 
 $botman->hears('Hola', function ($bot) {
-    $bot->reply('Hola! Soy Raphibot de Megaestruc, en qué puedo ayudarte?');
+    $bot->reply('Hola! Soy Raphibot, en qué puedo ayudarte?');
 });
 $botman->hears('ayuda', function ($bot) {
     $bot->reply('Tenemos un gran catálogo de servicios');
@@ -54,7 +57,20 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 
 
+$botman->hears('google',function(BotMan $bot){
 
+$bot->reply(ButtonTemplate::create('Do you want to know more about BotMan?')
+    ->addButton(ElementButton::create('Tell me more')
+        ->type('postback')
+        ->payload('tellmemore')
+    )
+    ->addButton(ElementButton::create('Show me the docs')
+        ->url('http://botman.io/')
+    )
+);
+
+
+});
 
 
 
