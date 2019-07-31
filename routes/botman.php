@@ -9,6 +9,8 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\File;
 use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use App\Product;
 use App\TypeProduct;
@@ -59,14 +61,26 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 $botman->hears('google',function(BotMan $bot){
 
-$bot->reply(ButtonTemplate::create('Do you want to know more about BotMan?')
-    ->addButton(ElementButton::create('Tell me more')
-        ->type('postback')
-        ->payload('tellmemore')
-    )
-    ->addButton(ElementButton::create('Show me the docs')
-        ->url('http://botman.io/')
-    )
+$bot->reply(GenericTemplate::create()
+    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+    ->addElements([
+        Element::create('BotMan Documentation')
+            ->subtitle('All about BotMan')
+            ->image('http://botman.io/img/botman-body.png')
+            ->addButton(ElementButton::create('visit')
+                ->url('http://botman.io')
+            )
+            ->addButton(ElementButton::create('tell me more')
+                ->payload('tellmemore')
+                ->type('postback')
+            ),
+        Element::create('BotMan Laravel Starter')
+            ->subtitle('This is the best way to start with Laravel and BotMan')
+            ->image('http://botman.io/img/botman-body.png')
+            ->addButton(ElementButton::create('visit')
+                ->url('https://github.com/mpociot/botman-laravel-starter')
+            ),
+    ])
 );
 
 
