@@ -8,7 +8,6 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
-use BotMan\Drivers\Facebook\Extensions\ListTemplate;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\BotMan\Messages\Attachments\File;
@@ -87,30 +86,27 @@ class SaludoConversation extends Conversation
           fwrite($fp, $content);
         fclose($fp);
         $metadata = $driveService->files->get($fileID);
+        $this->say(GenericTemplate::create()
+            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+            ->addElements([
+                Element::create($metadata->name)
+                    ->subtitle('All about BotMan')
+                    ->image('http://raphibot.herokuapp.com/logo.png')
+                    ->addButton(ElementButton::create('Descargar')
+                        ->url('http://raphibot.herokuapp.com/texto.docx')
+                    )
+                    ->addButton(ElementButton::create('Verlo en Drive')
+                        ->url('https://docs.google.com/document/d/'.$files[0]->id.'/edit')
+                    )
+                    ->addButton(ElementButton::create('No descargar')
+                        ->payload('tellmemore')
+                        ->type('postback')
+                    ),
+            ])
+        );
 
 
-
-        $this->say(ListTemplate::create()
-    ->useCompactView()
-    ->addGlobalButton(ElementButton::create('view more')
-        ->url('http://test.at')
-    )
-    ->addElement(Element::create('BotMan Documentation')
-        ->subtitle('All about BotMan')
-        ->image('http://botman.io/img/botman-body.png')
-        ->addButton(ElementButton::create('tell me more')
-            ->payload('tellmemore')
-            ->type('postback')
-        )
-    )
-    ->addElement(Element::create('BotMan Laravel Starter')
-        ->subtitle('This is the best way to start with Laravel and BotMan')
-        ->image('http://botman.io/img/botman-body.png')
-        ->addButton(ElementButton::create('visit')
-            ->url('https://github.com/mpociot/botman-laravel-starter')
-        )
-    )
-);
+        
 
         // Create attachment
         $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
