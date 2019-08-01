@@ -91,7 +91,7 @@ class SaludoConversation extends Conversation
             ->addElements([
                 Element::create($metadata->name)
                     ->subtitle('All about BotMan')
-                    ->image('https://drive.google.com/file/d/1PYSNFYbc2DNSQgMr7hsS6pYQa6By6uh2PcO2zg9V0OE/view')
+                    ->image('https://drive.google.com/file/d/1PYSNFYbc2DNSQgMr7hsS6pYQa6By6uh2PcO2zg9V0OE/view?usp=sharing')
                     ->addButton(ElementButton::create('Descargar')
                         ->url('http://raphibot.herokuapp.com/texto.docx')
                     )
