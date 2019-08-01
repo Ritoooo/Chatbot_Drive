@@ -69,11 +69,10 @@ class SaludoConversation extends Conversation
 
         $driveService = new Google_Service_Drive($client);
 
-      $files = $driveService->files->listFiles([
-         'q' => "name='Estructura_Del_Avance_del_Informe_Final'",
-         'fields' => 'files(id,size)'
-         ]);
-       // $this->say($files[0]->id);
+        $files = $driveService->files->listFiles([
+            'q' => "name contains 'Estructura'",
+            'fields' => 'files(id,size)'
+        ]);
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
@@ -90,13 +89,14 @@ class SaludoConversation extends Conversation
                     ),
             ])
         );
+
         // Create attachment
         $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
             'custom_payload' => true,
         ]);
 
         // Build message object
-        $message = OutgoingMessage::create('This is my text')
+        $message = OutgoingMessage::create($files[0]->id)
                     ->withAttachment($attachment);
 
         // Reply message object
