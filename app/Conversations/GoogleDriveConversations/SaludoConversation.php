@@ -87,7 +87,7 @@ class SaludoConversation extends Conversation
         fclose($fp);
         $metadata = $driveService->files->get($fileID);
         $this->say(GenericTemplate::create()
-            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+            ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
             ->addElements([
                 Element::create($metadata->name)
                     ->subtitle('All about BotMan')
