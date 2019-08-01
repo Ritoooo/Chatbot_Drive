@@ -97,7 +97,7 @@ class SaludoConversation extends Conversation
             ])
         );
         // Create attachment
-        $attachment = new File('http://raphibot.herokuapp.com/logo.png', [
+        $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
             'custom_payload' => true,
         ]);
 
