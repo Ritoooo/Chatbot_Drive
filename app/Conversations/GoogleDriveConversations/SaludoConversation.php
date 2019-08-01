@@ -87,24 +87,7 @@ class SaludoConversation extends Conversation
           fwrite($fp, $content);
         fclose($fp);
         $metadata = $driveService->files->get($fileID);
-        $this->say(GenericTemplate::create()
-            ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
-            ->addElements([
-                Element::create($metadata->name)
-                    ->subtitle('All about BotMan')
-                    ->image('http://raphibot.herokuapp.com/logo.png')
-                    ->addButton(ElementButton::create('Descargar')
-                        ->url('http://raphibot.herokuapp.com/texto.docx')
-                    )
-                    ->addButton(ElementButton::create('Verlo en Drive')
-                        ->url('https://docs.google.com/document/d/'.$files[0]->id.'/edit')
-                    )
-                    ->addButton(ElementButton::create('No descargar')
-                        ->payload('tellmemore')
-                        ->type('postback')
-                    ),
-            ])
-        );
+
 
 
         $this->say(ListTemplate::create()
