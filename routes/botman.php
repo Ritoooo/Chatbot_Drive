@@ -14,7 +14,8 @@ use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use App\Product;
 use App\TypeProduct;
-
+use App\Http\Controllers\Google_Client;
+use App\Http\Controllers\Google_Service_Drive;
 
 $botman = resolve('botman');
 
@@ -59,7 +60,7 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 
 
-$botman->hears('google',function(BotMan $bot){
+$botman->hears('api',function(BotMan $bot){
 
 $bot->reply(GenericTemplate::create()
     ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
@@ -87,6 +88,32 @@ $bot->reply(GenericTemplate::create()
 });
 
 
+$botman->hears('google',function(BotMan $bot){
+
+$bot->reply(GenericTemplate::create()
+    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+    ->addElements([
+        Element::create('BotMan Documentation')
+            ->subtitle('All about BotMan')
+            ->image('http://raphibot.herokuapp.com/logo.png')
+            ->addButton(ElementButton::create('visit')
+                ->url('http://botman.io')
+            )
+            ->addButton(ElementButton::create('tell me more')
+                ->payload('tellmemore')
+                ->type('postback')
+            ),
+        Element::create('BotMan Laravel Starter')
+            ->subtitle('This is the best way to start with Laravel and BotMan')
+            ->image('http://raphibot.herokuapp.com/logo.png')
+            ->addButton(ElementButton::create('visit')
+                ->url('https://github.com/mpociot/botman-laravel-starter')
+            ),
+    ])
+);
+
+
+});
 
 
 
