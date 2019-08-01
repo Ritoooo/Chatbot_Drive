@@ -42,7 +42,6 @@ $botman->hears('estructura_especial', function ($bot) {
 
 
 
-$botman->hears('hilos', GoogleDriveController::class.'@startConversation');
 
 
 
@@ -178,3 +177,6 @@ $botman->hears('input.cotizar', function (BotMan $bot) {
     $bot->reply($message);
      
 })->middleware($dialogflow);
+
+
+$botman->hears('input.docs', GoogleDriveController::class.'@startConversation')->middleware($dialogflow);
