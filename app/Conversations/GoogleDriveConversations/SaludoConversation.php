@@ -74,12 +74,24 @@ class SaludoConversation extends Conversation
             'fields' => 'files(id,size)'
         ]);
 
+        $fileId = $files[0]->id;
+        $fileSize = intval($files[0]->size);
+        $http = $client->authorize();
+        $fp = fopen('texto.docx', 'w');
+        $fileID = $files[0]->id;
+          $response = $driveService->files->export($fileID, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', array(
+            'alt' => 'media'
+        ));
+        $content = $response->getBody()->getContents();
+          fwrite($fp, $content);
+        fclose($fp);
+        $metadata = $driveService->files->get($fileID);
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
             ->addElements([
-                Element::create('BotMan Documentation')
+                Element::create($metadata->name)
                     ->subtitle('All about BotMan')
-                    ->image('http://raphibot.herokuapp.com/logo.png')
+                    ->image('https://drive.google.com/file/d/1PYSNFYbc2DNSQgMr7hsS6pYQa6By6uh2PcO2zg9V0OE/view')
                     ->addButton(ElementButton::create('Descargar')
                         ->url('http://raphibot.herokuapp.com/texto.docx')
                     )
@@ -99,7 +111,7 @@ class SaludoConversation extends Conversation
         ]);
 
         // Build message object
-        $message = OutgoingMessage::create($files[0]->id)
+        $message = OutgoingMessage::create($files[0]->mimeType)
                     ->withAttachment($attachment);
 
         // Reply message object
