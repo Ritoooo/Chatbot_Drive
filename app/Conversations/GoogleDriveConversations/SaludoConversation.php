@@ -62,63 +62,98 @@ class SaludoConversation extends Conversation
     }
 
     public function google(){
-        $client = new Google_Client();
-        putenv("GOOGLE_APPLICATION_CREDENTIALS=".__DIR__."/client_id.json");
-        $client->useApplicationDefaultCredentials();
-        $client->addScope(Google_Service_Drive::DRIVE);
+        $question = Question::create('¿Qué documento necesitas?')
+            ->fallback('Lo siento, no puedo responder por aquí')
+            ->callbackId('docs');
+        return $this->ask($question, function(Answer $answer){
+            if($answer->getValue() === 'ninguno'){
+                $this->say('Ok, ningún documento entonces');
+            }
+            else{
+                $client = new Google_Client();
+                putenv("GOOGLE_APPLICATION_CREDENTIALS=".__DIR__."/client_id.json");
+                $client->useApplicationDefaultCredentials();
+                $client->addScope(Google_Service_Drive::DRIVE);
 
-        $driveService = new Google_Service_Drive($client);
+                $driveService = new Google_Service_Drive($client);
 
-        $files = $driveService->files->listFiles([
-            'q' => "name contains 'Estructura'",
-            'fields' => 'files(id,size)'
-        ]);
+                $files = $driveService->files->listFiles([
+                    'q' => "name contains '".$answer->getValue()."'",
+                    'fields' => 'files(id,size)'
+                ]);
 
-        $fileId = $files[0]->id;
-        $fileSize = intval($files[0]->size);
-        $http = $client->authorize();
-        $fp = fopen('texto.docx', 'w');
-        $fileID = $files[0]->id;
-          $response = $driveService->files->export($fileID, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', array(
-            'alt' => 'media'
-        ));
-        $content = $response->getBody()->getContents();
-          fwrite($fp, $content);
-        fclose($fp);
-        $metadata = $driveService->files->get($fileID);
-        $this->say(GenericTemplate::create()
-            ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
-            ->addElements([
-                Element::create($metadata->name)
-                    ->subtitle('All about BotMan')
-                    ->image('http://raphibot.herokuapp.com/logo.png')
-                    ->addButton(ElementButton::create('Descargar')
-                        ->url('http://raphibot.herokuapp.com/texto.docx')
-                    )
-                    ->addButton(ElementButton::create('Verlo en Drive')
-                        ->url('https://docs.google.com/document/d/'.$files[0]->id.'/edit')
-                    )
-                    ->addButton(ElementButton::create('No descargar')
-                        ->payload('tellmemore')
-                        ->type('postback')
-                    ),
-            ])
-        );
+                if ( count($files) < 1 ) {
+                 $this->say('No pude encontrar el archivo :(');
+                }
+                else if ( count($files) > 1) {
+                    $buttons = [];
+                    foreach ( $files as $index ) {
+                        array_push($buttons, Button::create($index->name)->value($index->name));
+                    }
+                    $question = Question::create('He encontrado más de un archivo que tienen el nombre que me diste')
+                        ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
+                        ->callbackId('files');
+                        //->addButtons($buttons);
+                    return $this->ask($question, function(Answer $answer){
+                        if ($answer->isInteractiveMessageReply()) {
+                            if ($answer->getValue()==='si') {
+                            $this->say('Chao');
+                            }else{
+                                $this->say('Me quedo!!');
+                            }
+                        }
+                    });
+                   
+                }
+                else{
+                    $fileId = $files[0]->id;
+                    $fileSize = intval($files[0]->size);
+                    $http = $client->authorize();
+                    $fp = fopen('texto.docx', 'w');
+                    $fileID = $files[0]->id;
+                      $response = $driveService->files->export($fileID, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', array(
+                        'alt' => 'media'
+                    ));
+                    $content = $response->getBody()->getContents();
+                      fwrite($fp, $content);
+                    fclose($fp);
+                    $metadata = $driveService->files->get($fileID);
+                    $this->say(GenericTemplate::create()
+                        ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
+                        ->addElements([
+                            Element::create($metadata->name)
+                                ->subtitle('All about BotMan')
+                                ->image('http://raphibot.herokuapp.com/logo.png')
+                                ->addButton(ElementButton::create('Descargar')
+                                    ->url('http://raphibot.herokuapp.com/texto.docx')
+                                )
+                                ->addButton(ElementButton::create('Verlo en Drive')
+                                    ->url('https://docs.google.com/document/d/'.$files[0]->id.'/edit')
+                                )
+                                ->addButton(ElementButton::create('No descargar')
+                                    ->payload('tellmemore')
+                                    ->type('postback')
+                                ),
+                        ])
+                    );
 
 
-        
 
-        // Create attachment
-        $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
-            'custom_payload' => true,
-        ]);
 
-        // Build message object
-        $message = OutgoingMessage::create($files[0]->mimeType)
-                    ->withAttachment($attachment);
+                    // Create attachment
+                    $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
+                        'custom_payload' => true,
+                    ]);
 
-        // Reply message object
-        $this->say($message);        
+                    // Build message object
+                    $message = OutgoingMessage::create($metadata->name)
+                                ->withAttachment($attachment);
+
+                    // Reply message object
+                    $this->say($message);    
+                }    
+            }
+        });
     }
 
     public function run()
