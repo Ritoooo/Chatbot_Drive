@@ -91,7 +91,7 @@ class SaludoConversation extends Conversation
                         $file = $driveService->files->get($index->id);
                         array_push($buttons, Button::create($file->name)->value($file->name));
                     }
-                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste'.count($files))
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
