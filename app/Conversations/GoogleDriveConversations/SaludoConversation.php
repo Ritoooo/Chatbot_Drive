@@ -78,7 +78,7 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->getValue()."' and mimeType = 'application/vnd.google-apps.document'",
+                    'q' => "name contains '".$answer->getValue()."'",
                     'fields' => 'files(id,size)'
                 ]);
 
