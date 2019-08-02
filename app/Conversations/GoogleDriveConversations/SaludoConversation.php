@@ -78,8 +78,8 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->getValue()."'",
-                    'fields' => 'files(id,size)'
+                    'q' => "name contains '".$answer->getValue()."' and mimeType = 'application/vnd.google-apps.document' and mimeType != 'application/vnd.google-apps.folder'",
+                    'fields' => 'files(id, name, webViewLink, exportLinks, thumbnailLink, mimeType)'
                 ]);
 
                 if ( count($files) < 1 ) {
@@ -88,10 +88,9 @@ class SaludoConversation extends Conversation
                 else if ( count($files) > 1) {
                     $buttons = [];
                     foreach ( $files as $index ) {
-                        $file = $driveService->files->get($index->id);
-                        array_push($buttons, Button::create($file->name)->value($file->name));
+                        array_push($buttons, Button::create($index->name)->value($index->name));
                     }
-                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste'.count($files))
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste'.count($files).json_encode($files))
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
