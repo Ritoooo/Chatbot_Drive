@@ -78,7 +78,7 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->getValue()."'",
+                    'q' => "name contains '".$answer->getValue()."' and mimeType = 'application/vnd.google-apps.document'",
                     'fields' => 'files(id,size)'
                 ]);
 
@@ -88,22 +88,21 @@ class SaludoConversation extends Conversation
                 else if ( count($files) > 1) {
                     $buttons = [];
                     foreach ( $files as $index ) {
-                        array_push($buttons, Button::create($index->name)->value($index->name));
+                        $file = $driveService->files->get($index->id);
+                        array_push($buttons, Button::create($file->name)->value($file->name));
                     }
-                    $question = Question::create('He encontrado más de un archivo que tienen el nombre que me diste')
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
-                        ->callbackId('files');
-                        //->addButtons($buttons);
-                    return $this->ask($question, function(Answer $answer){
-                        if ($answer->isInteractiveMessageReply()) {
+                        ->callbackId('files')
+                        ->addButtons($buttons);
+                     $this->ask($question, function(Answer $answer){                        
                             if ($answer->getValue()==='si') {
-                            $this->say('Chao');
+                                $this->say('Chao');
                             }else{
                                 $this->say('Me quedo!!');
                             }
                         }
-                    });
-                   
+                    );
                 }
                 else{
                     $fileId = $files[0]->id;
@@ -136,10 +135,6 @@ class SaludoConversation extends Conversation
                                 ),
                         ])
                     );
-
-
-
-
                     // Create attachment
                     $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
                         'custom_payload' => true,
