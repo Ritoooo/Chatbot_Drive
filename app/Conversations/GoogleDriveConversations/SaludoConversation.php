@@ -45,7 +45,7 @@ class SaludoConversation extends Conversation
                 else if ( count($files) > 1) {
                     $buttons = [];
                     foreach ( $files as $index ) {
-                        array_push($buttons, Button::create($index->name)->value($index->name));
+                        array_push($buttons, Button::create($index->name)->value($index->id));
                     }
                     $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
@@ -54,7 +54,7 @@ class SaludoConversation extends Conversation
                      $this->ask($question, function(Answer $answer) use ($files) {
                         $finded = false;
                             foreach ( $files as $file ) {
-                                if ($answer->gettext() === $file->name) {
+                                if ($answer->getValue() === $file->id) {
                                     $this->sendFile($file);
                                     $finded = true;
                             }
@@ -79,6 +79,7 @@ class SaludoConversation extends Conversation
     }
 
     public function sendFile($file){
+        $this->say('Hola');
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
