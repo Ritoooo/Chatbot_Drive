@@ -53,16 +53,21 @@ class SaludoConversation extends Conversation
                         ->addButtons($buttons);
                      $this->ask($question, function(Answer $answer) use ($files) {
                         $finded;
-                            foreach ( $files as $file ) {
-                                if ($answer->getValue() === $file->id) {
-                                    $this->sendFile($file);
+                        $file;
+                            foreach ( $files as $index ) {
+                                if ($answer->getValue() === $index->id) {
+                                    //$this->sendFile($index);
                                     $finded = true;
+                                    $file = $index;
                             }
                                 }if ($answer->gettext() == 'ninguno') {
                                     $this->say('Ok, ninguno entonces');
                                 }
                                 elseif($finded != true){
                                     $this->say('Lo siento, no te entendí');
+                                }
+                                else{
+                                    $this->sendFile($file);
                                 }
                         }
                     );
