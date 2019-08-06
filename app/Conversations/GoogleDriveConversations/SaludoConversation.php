@@ -52,7 +52,7 @@ class SaludoConversation extends Conversation
                         ->callbackId('files')
                         ->addButtons($buttons);
                      $this->ask($question, function(Answer $answer) use ($files) {
-                        $finded = false;
+                        $finded;
                             foreach ( $files as $file ) {
                                 if ($answer->getValue() === $file->id) {
                                     $this->sendFile($file);
@@ -61,7 +61,7 @@ class SaludoConversation extends Conversation
                                 }if ($answer->gettext() == 'ninguno') {
                                     $this->say('Ok, ninguno entonces');
                                 }
-                                elseif($finded ==false){
+                                elseif($finded != true){
                                     $this->say('Lo siento, no te entendí');
                                 }
                         }
