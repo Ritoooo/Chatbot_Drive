@@ -105,6 +105,24 @@ class SaludoConversation extends Conversation
                     $this->say("souka");
                 }
                 else{
+                    $this->say(GenericTemplate::create()
+                        ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
+                        ->addElements([
+                            Element::create($files->name)
+                                ->subtitle($files->name)
+                                ->image('http://raphibot.herokuapp.com/logo.png')
+                                ->addButton(ElementButton::create('Descargar')
+                                    ->url('http://raphibot.herokuapp.com/texto.docx')
+                                )
+                                ->addButton(ElementButton::create('Verlo en Drive')
+                                    ->url($files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
+                                )
+                                ->addButton(ElementButton::create('No descargar')
+                                    ->payload('tellmemore')
+                                    ->type('postback')
+                                ),
+                        ])
+                    );
                     /*$fileId = $files[0]->id;
                     $fileSize = intval($files[0]->size);
                     $http = $client->authorize();
@@ -146,8 +164,8 @@ class SaludoConversation extends Conversation
 
                     // Reply message object
                     $this->say($message);   */ 
-                    $this->say(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']));
-                    $this->say(json_encode(($files)));
+                   // $this->say(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']));
+                    //$this->say(json_encode(($files)));
                 }    
             }
         });
