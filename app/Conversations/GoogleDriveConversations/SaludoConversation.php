@@ -52,25 +52,27 @@ class SaludoConversation extends Conversation
                         ->callbackId('files')
                         ->addButtons($buttons);
                      $this->ask($question, function(Answer $answer) use ($files) {
-                        $finded;
-                        $file;
-                            foreach ( $files as $index ) {
-                                if ($answer->getValue() === $index->id) {
-                                    //$this->sendFile($index);
-                                    $finded = true;
-                                    $file = $index;
-                            }
-                                }if ($answer->gettext() == 'ninguno') {
-                                    $this->say('Ok, ninguno entonces');
+                        if ($answer->isInteractiveMessageReply()) {
+                            $finded;
+                            $file;
+                                foreach ( $files as $index ) {
+                                    if ($answer->getValue() === $index->id) {
+                                        $finded = true;
+                                        $file = $index;
+                                    }
                                 }
-                                else if($finded == true){
+                                if($finded == true){
                                     $this->say('-->'.$file->id.'<--');
                                     $this->sendFile($file);
                                 }
-                                else{
-                                    $this->say('Lo siento, no te entendí');
-                                }
+                            }
+                        else if ($answer->gettext() == 'ninguno') {
+                            $this->say('Ok, ninguno entonces');
                         }
+                        else {
+                            $this->say('Lo siento, no te entendí');
+                        }
+                    }
                     );
                 }
                 else{
