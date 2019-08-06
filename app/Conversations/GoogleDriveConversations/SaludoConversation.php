@@ -78,7 +78,7 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->getValue()."'",
+                    'q' => "name contains '".$answer->gettext()."'",
                     'fields' => 'files(id, name, webViewLink, exportLinks, thumbnailLink, mimeType)'
                 ]);
 
@@ -90,7 +90,7 @@ class SaludoConversation extends Conversation
                     foreach ( $files as $index ) {
                         array_push($buttons, Button::create($index->name)->value($index->name));
                     }
-                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste -->'.$answer->gettext().'<--')
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
