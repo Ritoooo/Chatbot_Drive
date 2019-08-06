@@ -35,7 +35,7 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->gettext()."'",
+                    'q' => "name contains '".$answer->gettext()."' and mimeType = 'application/vnd.google-apps.document'",
                     'fields' => 'files(id, name, webViewLink, exportLinks, thumbnailLink, mimeType)'
                 ]);
 
@@ -64,6 +64,7 @@ class SaludoConversation extends Conversation
                                     $this->say('Ok, ninguno entonces');
                                 }
                                 else if($finded == true){
+                                    $this->say('-->'.$file->id.'<--');
                                     $this->sendFile($file);
                                 }
                                 else{
