@@ -51,47 +51,31 @@ class SaludoConversation extends Conversation
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
-                     $this->ask($question, function(Answer $answer){
-                        foreach ($files as $file) {
-                            if ($answer->gettext() === $file->name) {
-                                $this->sendFile($file);
+                     $this->ask($question, function(Answer $answer) use ($files) {
+                        $finded = false;
+                            foreach ( $files as $file ) {
+                                if ($answer->getValue() === $file->name) {
+                                    $this->sendFile($file);
+                                    $finded = true;
                             }
-                        }                      
-                            if ($answer->getValue()==='si') {
-                                $this->say('Chao');
-                            }else{
-                                $this->say('Me quedo!!');
-                            }
+                                }if ($answer->gettext() == 'ninguno') {
+                                    $this->say('Ok, ninguno entonces');
+                                }
+                                elseif($finded ==false){
+                                    $this->say('Lo siento, no te entendí');
+                                }
                         }
                     );
-                    $this->say("souka");
                 }
                 else{
                     $this->sendFile($files[0]);
-                    /*$this->say(GenericTemplate::create()
-                        ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
-                        ->addElements([
-                            Element::create($files[0]->name)
-                                ->subtitle($files[0]->name)
-                                ->image('http://raphibot.herokuapp.com/logo.png')
-                                ->addButton(ElementButton::create('Descargar')
-                                    ->url($files[0]->webViewLink)
-                                )
-                                ->addButton(ElementButton::create('Verlo en Drive')
-                                    ->url(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']))
-                                )
-                                ->addButton(ElementButton::create('No descargar')
-                                    ->payload('tellmemore')
-                                    ->type('postback')
-                                ),
-                        ])
-                    );*/
                 }    
             }
         });
     }
 
     public function sendFile($file){
+
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
             ->addElements([
@@ -99,17 +83,15 @@ class SaludoConversation extends Conversation
                     ->subtitle($file->name)
                     ->image('http://raphibot.herokuapp.com/logo.png')
                     ->addButton(ElementButton::create('Descargar')
-                        ->url($file->webViewLink)
-                    )
-                    ->addButton(ElementButton::create('Verlo en Drive')
-                        ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']))
-                    )
+                    ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])))
+                    ->addButton(ElementButton::create('Verlo en Drive')->url($file->webViewLink))
                     ->addButton(ElementButton::create('No descargar')
                         ->payload('tellmemore')
                         ->type('postback')
                     ),
             ])
         );
+        
     }
 
     public function run()
