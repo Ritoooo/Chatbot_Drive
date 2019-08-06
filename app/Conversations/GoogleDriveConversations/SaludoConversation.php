@@ -17,49 +17,6 @@ use Google_Service_Drive;
 
 class SaludoConversation extends Conversation
 {
-    public function saludo()
-    {
-        $question = Question::create("Hola, soy Raphibot, en qué puedo ayudarte?")
-            ->fallback('No se puede hacer la pregunta :"v')
-            ->callbackId('saludo')
-            ->addButtons([
-                Button::create('Cuéntame un chiste')->value('chiste'),
-                Button::create('Dame una cita elegante')->value('cita'),
-            ]);
-
-        return $this->ask($question, function (Answer $answer) {
-            if ($answer->isInteractiveMessageReply()) {
-                if ($answer->getValue() === 'chiste') {
-                    $joke = json_decode(file_get_contents('http://api.icndb.com/jokes/random'));
-                    $this->say($joke->value->joke);
-                } else {
-                    $this->say(Inspiring::quote());
-                }
-            }
-        $this->despedida();
-        }
-        );
-    }
-
-    public function despedida(){
-        $buttons = [
-            Button::create('Sí')->value('si'),
-            Button::create('No me quiero ir sr Stark')->value('no'),
-        ];
-        $question = Question::create('Ya te quieres ir?')
-        ->fallback('No puedo preguntar lo que quiero')
-        ->callbackId('despedida')
-        ->addButtons($buttons);
-        return $this->ask($question, function(Answer $answer){
-            if ($answer->isInteractiveMessageReply()) {
-                if ($answer->getValue()==='si') {
-                $this->say('Chao');
-                }else{
-                    $this->say('Me quedo!!');
-                }
-            }
-        });
-    }
 
     public function google(){
         $question = Question::create('¿Qué documento necesitas?')
@@ -94,7 +51,12 @@ class SaludoConversation extends Conversation
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
-                     $this->ask($question, function(Answer $answer){                        
+                     $this->ask($question, function(Answer $answer){
+                        foreach ($files as $file) {
+                            if ($answer->gettext() === $file->name) {
+                                $this->sendFile($file);
+                            }
+                        }                      
                             if ($answer->getValue()==='si') {
                                 $this->say('Chao');
                             }else{
@@ -105,14 +67,15 @@ class SaludoConversation extends Conversation
                     $this->say("souka");
                 }
                 else{
-                    $this->say(GenericTemplate::create()
+                    $this->sendFile($files[0]);
+                    /*$this->say(GenericTemplate::create()
                         ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
                         ->addElements([
                             Element::create($files[0]->name)
                                 ->subtitle($files[0]->name)
                                 ->image('http://raphibot.herokuapp.com/logo.png')
                                 ->addButton(ElementButton::create('Descargar')
-                                    ->url('http://raphibot.herokuapp.com/texto.docx')
+                                    ->url($files[0]->webViewLink)
                                 )
                                 ->addButton(ElementButton::create('Verlo en Drive')
                                     ->url(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']))
@@ -122,54 +85,31 @@ class SaludoConversation extends Conversation
                                     ->type('postback')
                                 ),
                         ])
-                    );
-                    $this->say('-->'.$files[0]->name.'<--'.str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']));
-                    /*$fileId = $files[0]->id;
-                    $fileSize = intval($files[0]->size);
-                    $http = $client->authorize();
-                    $fp = fopen('texto.docx', 'w');
-                    $fileID = $files[0]->id;
-                      $response = $driveService->files->export($fileID, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', array(
-                        'alt' => 'media'
-                    ));
-                    $content = $response->getBody()->getContents();
-                      fwrite($fp, $content);
-                    fclose($fp);
-                    $metadata = $driveService->files->get($fileID);
-                    $this->say(GenericTemplate::create()
-                        ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
-                        ->addElements([
-                            Element::create($metadata->name)
-                                ->subtitle('All about BotMan')
-                                ->image('http://raphibot.herokuapp.com/logo.png')
-                                ->addButton(ElementButton::create('Descargar')
-                                    ->url('http://raphibot.herokuapp.com/texto.docx')
-                                )
-                                ->addButton(ElementButton::create('Verlo en Drive')
-                                    ->url('https://docs.google.com/document/d/'.$files[0]->id.'/edit')
-                                )
-                                ->addButton(ElementButton::create('No descargar')
-                                    ->payload('tellmemore')
-                                    ->type('postback')
-                                ),
-                        ])
-                    );
-                    // Create attachment
-                    $attachment = new File('http://raphibot.herokuapp.com/texto.docx', [
-                        'custom_payload' => true,
-                    ]);
-
-                    // Build message object
-                    $message = OutgoingMessage::create($metadata->name)
-                                ->withAttachment($attachment);
-
-                    // Reply message object
-                    $this->say($message);   */ 
-                   // $this->say(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']));
-                    //$this->say(json_encode(($files)));
+                    );*/
                 }    
             }
         });
+    }
+
+    public function sendFile($file){
+        $this->say(GenericTemplate::create()
+            ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
+            ->addElements([
+                Element::create($file->name)
+                    ->subtitle($file->name)
+                    ->image('http://raphibot.herokuapp.com/logo.png')
+                    ->addButton(ElementButton::create('Descargar')
+                        ->url($file->webViewLink)
+                    )
+                    ->addButton(ElementButton::create('Verlo en Drive')
+                        ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']))
+                    )
+                    ->addButton(ElementButton::create('No descargar')
+                        ->payload('tellmemore')
+                        ->type('postback')
+                    ),
+            ])
+        );
     }
 
     public function run()
