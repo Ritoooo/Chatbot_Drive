@@ -63,11 +63,11 @@ class SaludoConversation extends Conversation
                                 }if ($answer->gettext() == 'ninguno') {
                                     $this->say('Ok, ninguno entonces');
                                 }
-                                elseif($finded != true){
-                                    $this->say('Lo siento, no te entendí');
+                                else if($finded == true){
+                                    $this->sendFile($file);
                                 }
                                 else{
-                                    $this->sendFile($file);
+                                    $this->say('Lo siento, no te entendí');
                                 }
                         }
                     );
