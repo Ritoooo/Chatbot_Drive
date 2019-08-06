@@ -78,7 +78,7 @@ class SaludoConversation extends Conversation
                 $driveService = new Google_Service_Drive($client);
 
                 $files = $driveService->files->listFiles([
-                    'q' => "name contains '".$answer->getValue()."' and mimeType = 'application/vnd.google-apps.document' and mimeType != 'application/vnd.google-apps.folder'",
+                    'q' => "name contains '".$answer->getValue()."'",
                     'fields' => 'files(id, name, webViewLink, exportLinks, thumbnailLink, mimeType)'
                 ]);
 
@@ -90,22 +90,22 @@ class SaludoConversation extends Conversation
                     foreach ( $files as $index ) {
                         array_push($buttons, Button::create($index->name)->value($index->name));
                     }
-                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste'.count($files).json_encode($files))
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
-                     /*$this->ask($question, function(Answer $answer){                        
+                     $this->ask($question, function(Answer $answer){                        
                             if ($answer->getValue()==='si') {
                                 $this->say('Chao');
                             }else{
                                 $this->say('Me quedo!!');
                             }
                         }
-                    );*/
+                    );
                     $this->say("souka");
                 }
                 else{
-                    $fileId = $files[0]->id;
+                    /*$fileId = $files[0]->id;
                     $fileSize = intval($files[0]->size);
                     $http = $client->authorize();
                     $fp = fopen('texto.docx', 'w');
@@ -145,7 +145,9 @@ class SaludoConversation extends Conversation
                                 ->withAttachment($attachment);
 
                     // Reply message object
-                    $this->say($message);    
+                    $this->say($message);   */ 
+                    $this->say(str_replace('"','',$files[0]->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document']));
+                    $this->say(json_encode(($files)));
                 }    
             }
         });
