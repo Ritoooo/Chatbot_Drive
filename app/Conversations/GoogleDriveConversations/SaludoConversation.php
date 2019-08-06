@@ -54,7 +54,7 @@ class SaludoConversation extends Conversation
                      $this->ask($question, function(Answer $answer) use ($files) {
                         $finded = false;
                             foreach ( $files as $file ) {
-                                if ($answer->getValue() === $file->name) {
+                                if ($answer->gettext() === $file->name) {
                                     $this->sendFile($file);
                                     $finded = true;
                             }
@@ -79,7 +79,6 @@ class SaludoConversation extends Conversation
     }
 
     public function sendFile($file){
-        $this->say('Hola');
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
@@ -96,7 +95,7 @@ class SaludoConversation extends Conversation
                     ),
             ])
         );
-        
+
     }
 
     public function run()
