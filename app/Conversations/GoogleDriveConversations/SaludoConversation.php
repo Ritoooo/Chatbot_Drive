@@ -90,7 +90,7 @@ class SaludoConversation extends Conversation
                     foreach ( $files as $index ) {
                         array_push($buttons, Button::create($index->name)->value($index->name));
                     }
-                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste')
+                    $question = Question::create('He encontrado más de un documento que tienen el nombre con la palabra que me diste '.$answer->getValue())
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
