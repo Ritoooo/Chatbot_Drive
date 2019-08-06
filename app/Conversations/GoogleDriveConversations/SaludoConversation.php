@@ -79,6 +79,7 @@ class SaludoConversation extends Conversation
     }
 
     public function sendFile($file){
+        $this->say('Hola');
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
@@ -95,7 +96,6 @@ class SaludoConversation extends Conversation
                     ),
             ])
         );
-        $this->say('Hola');
         
     }
 
