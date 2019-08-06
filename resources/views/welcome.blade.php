@@ -56,8 +56,8 @@
     
     <table>
         <tr><td><h2 style="font-family: Varela Round;  color: white">Chatbot <br><br> Google Sheets / Jira</h2></td></tr>
-        <tr><td style="font-family: Varela Round;  color: white">Integrante</td></tr>
-        <tr><td style="font-family: Varela Round;  color: black"><b>Orellana Aliano Roberto</b></td></tr>
+        <tr><td style="font-family: Varela Round;  color: white">By</td></tr>
+        <tr><td style="font-family: Varela Round;  color: black"><b>Roberto</b></td></tr>
     </table>
     <div class="content">
         <div class="logo">

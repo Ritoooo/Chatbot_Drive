@@ -94,14 +94,15 @@ class SaludoConversation extends Conversation
                         ->fallback('Lo siento mi pregunta no puede ser enviada :"v')
                         ->callbackId('files')
                         ->addButtons($buttons);
-                     $this->ask($question, function(Answer $answer){                        
+                     /*$this->ask($question, function(Answer $answer){                        
                             if ($answer->getValue()==='si') {
                                 $this->say('Chao');
                             }else{
                                 $this->say('Me quedo!!');
                             }
                         }
-                    );
+                    );*/
+                    $this->say("souka");
                 }
                 else{
                     $fileId = $files[0]->id;
