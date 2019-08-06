@@ -65,7 +65,7 @@ class SaludoConversation extends Conversation
         $question = Question::create('¿Qué documento necesitas?')
             ->fallback('Lo siento, no puedo responder por aquí')
             ->callbackId('docs');
-        return $this->ask($question, function(Answer $answer){
+        $this->ask($question, function(Answer $answer){
             if($answer->getValue() == 'ninguno'){
                 $this->say('Ok, ningún documento entonces');
             }
