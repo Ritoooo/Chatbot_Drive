@@ -74,21 +74,28 @@ class SaludoConversation extends Conversation
         });
     }
 
+    public function hearForFile(){
+
+    }
+
     public function sendFile($file){
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
             ->addElements([
-                Element::create('$file->name')
-                    ->subtitle('$file->name')
+                Element::create($file->name)
+                    ->subtitle($file->name)
                     ->image('http://raphibot.herokuapp.com/logo.png')
-                    ->addButton(ElementButton::create('Verlo en Drive')->url('$file->webViewLink'))
+                    ->addButton(ElementButton::create('Descargar')
+                    ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])))
+                    ->addButton(ElementButton::create('Verlo en Drive')->url($file->webViewLink))
                     ->addButton(ElementButton::create('No descargar')
                         ->payload('tellmemore')
                         ->type('postback')
                     ),
             ])
         );
+        $this->say('Hola');
         
     }
 
