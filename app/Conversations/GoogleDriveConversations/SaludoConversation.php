@@ -62,7 +62,6 @@ class SaludoConversation extends Conversation
                                     }
                                 }
                                 if($finded == true){
-                                    $this->say('-->'.$file->id.'<--');
                                     $this->sendFile($file);
                                 }
                             }
@@ -87,7 +86,6 @@ class SaludoConversation extends Conversation
     }
 
     public function sendFile($file){
-        $this->say('Hola');
 
         $this->say(GenericTemplate::create()
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
