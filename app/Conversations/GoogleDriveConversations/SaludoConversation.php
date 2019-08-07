@@ -36,7 +36,7 @@ class SaludoConversation extends Conversation
 
                 $files = $driveService->files->listFiles([
                     'q' => "name contains '".$answer->gettext()."' and mimeType = 'application/vnd.google-apps.document'",
-                    'fields' => 'files(id, name, webViewLink, exportLinks, thumbnailLink, mimeType)'
+                    'fields' => 'files(id, name, webViewLink, exportLinks, iconLink, thumbnailLink, mimeType)'
                 ]);
 
                 if ( count($files) < 1 ) {
@@ -92,7 +92,7 @@ class SaludoConversation extends Conversation
             ->addElements([
                 Element::create($file->name)
                     ->subtitle($file->name)
-                    ->image('http://raphibot.herokuapp.com/logo.png')
+                    ->image($file->iconLink)
                     ->addButton(ElementButton::create('Descargar')
                     ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])))
                     ->addButton(ElementButton::create('Verlo en Drive')->url($file->webViewLink))
