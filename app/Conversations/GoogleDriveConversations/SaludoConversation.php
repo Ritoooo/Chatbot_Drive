@@ -36,7 +36,7 @@ class SaludoConversation extends Conversation
 
                 $files = $driveService->files->listFiles([
                     'q' => "name contains '".$answer->gettext()."' and mimeType = 'application/vnd.google-apps.document'",
-                    'fields' => 'files(id, name, webViewLink, exportLinks, iconLink, thumbnailLink, mimeType)'
+                    'fields' => 'files(id, name, webViewLink, exportLinks, iconLink, thumbnailLink, mimeType, description)'
                 ]);
 
                 if ( count($files) < 1 ) {
@@ -91,8 +91,8 @@ class SaludoConversation extends Conversation
             ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
             ->addElements([
                 Element::create($file->name)
-                    ->subtitle($file->name)
-                    ->image($file->iconLink)
+                    ->subtitle($file->description)
+                    ->image($file->thumbnailLink)
                     ->addButton(ElementButton::create('Descargar')
                     ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])))
                     ->addButton(ElementButton::create('Verlo en Drive')->url($file->webViewLink))
