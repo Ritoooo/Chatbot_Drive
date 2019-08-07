@@ -92,7 +92,7 @@ class SaludoConversation extends Conversation
             ->addElements([
                 Element::create($file->name)
                     ->subtitle($file->description)
-                    ->image($file->thumbnailLink)
+                    ->image('http://raphibot.herokuapp.com/logo.png')
                     ->addButton(ElementButton::create('Descargar')
                     ->url(str_replace('"','',$file->exportLinks['application/vnd.openxmlformats-officedocument.wordprocessingml.document'])))
                     ->addButton(ElementButton::create('Verlo en Drive')->url($file->webViewLink))
