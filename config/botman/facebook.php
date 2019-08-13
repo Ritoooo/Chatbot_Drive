@@ -92,7 +92,7 @@ return [
                 ],
                 [
                     'type' => 'web_url',
-                    'title' => 'Latest News',
+                    'title' => 'Latest News xd',
                     'url' => 'http://botman.io',
                     'webview_height_ratio' => 'full',
                 ],
