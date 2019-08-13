@@ -180,3 +180,6 @@ $botman->hears('input.cotizar', function (BotMan $bot) {
 
 
 $botman->hears('input.docs', GoogleDriveController::class.'@startConversation')->middleware($dialogflow);
+
+
+$botman->hears('GET_STARTED', GoogleDriveController::class.'@startConversation');
