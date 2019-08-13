@@ -77,23 +77,28 @@ return [
     'persistent_menu' => [
         [
             'locale' => 'default',
-            'composer_input_disabled' => 'true',
+            'composer_input_disabled' => 'false',
             'call_to_actions' => [
                 [
-                    'title' => 'My Account',
+                    'title' => 'Consultar Documentos',
                     'type' => 'nested',
                     'call_to_actions' => [
                         [
-                            'title' => 'Pay Bill',
+                            'title' => 'Google',
                             'type' => 'postback',
-                            'payload' => 'PAYBILL_PAYLOAD',
+                            'payload' => 'docs',
+                        ],
+                        [
+                            'title' => 'Jira',
+                            'type' => 'postback',
+                            'payload' => 'google',
                         ],
                     ],
                 ],
                 [
                     'type' => 'web_url',
-                    'title' => 'Latest News xd',
-                    'url' => 'http://botman.io',
+                    'title' => 'Visitar Página',
+                    'url' => 'http://raphibot.herokuapp.com',
                     'webview_height_ratio' => 'full',
                 ],
             ],
