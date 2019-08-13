@@ -84,7 +84,7 @@ return [
                     'type' => 'nested',
                     'call_to_actions' => [
                         [
-                            'title' => 'Google',
+                            'title' => 'Google Drive',
                             'type' => 'postback',
                             'payload' => 'docs',
                         ],
