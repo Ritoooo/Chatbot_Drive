@@ -84,12 +84,12 @@ return [
                     'type' => 'nested',
                     'call_to_actions' => [
                         [
-                            'title' => 'Google Drive',
+                            'title' => 'Desde Google Drive',
                             'type' => 'postback',
                             'payload' => 'docs',
                         ],
                         [
-                            'title' => 'Jira',
+                            'title' => 'Desde Jira',
                             'type' => 'postback',
                             'payload' => 'google',
                         ],
@@ -98,7 +98,7 @@ return [
                 [
                     'type' => 'web_url',
                     'title' => 'Visitar Página',
-                    'url' => 'http://raphibot.herokuapp.com',
+                    'url' => 'https://raphibot.herokuapp.com',
                     'webview_height_ratio' => 'full',
                 ],
             ],
