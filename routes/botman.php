@@ -179,7 +179,25 @@ $botman->hears('input.cotizar', function (BotMan $bot) {
 })->middleware($dialogflow);
 
 
-$botman->hears('input.docs', GoogleDriveController::class.'@startConversation')->middleware($dialogflow);
 
 
-$botman->hears('GET_STARTED', GoogleDriveController::class.'@startConversation');
+
+
+
+//FacebookDriver
+
+$botman->group(['driver' => FacebookDriver::class], function($bot) {
+    $dialogflow = ApiAi::create('0f9adfb0ad9549adaccb8069b24eba9d')->listenForAction();
+    $bot->middleware->received($dialogflow);
+    
+    $bot->hears('input.docs', GoogleDriveController::class.'@startConversation')->middleware($dialogflow);
+    $bot->hears('GET_STARTED', GoogleDriveController::class.'@startConversation');
+});
+
+
+
+
+
+$botman->exception(Exception::class, function($exception, $bot) {
+    $bot->reply('Sorry, something went wrong');
+});
