@@ -186,18 +186,25 @@ $botman->hears('input.cotizar', function (BotMan $bot) {
 
 //FacebookDriver
 
-$botman->group(['driver' => FacebookDriver::class], function($bot) {
+$botman->group(['driver' => Facebook::class], function($bot) {
     $dialogflow = ApiAi::create('0f9adfb0ad9549adaccb8069b24eba9d')->listenForAction();
     $bot->middleware->received($dialogflow);
-    
+
     $bot->hears('input.docs', GoogleDriveController::class.'@startConversation')->middleware($dialogflow);
     $bot->hears('GET_STARTED', GoogleDriveController::class.'@startConversation');
 });
 
 
 
+$botman->hears('Exception', function ($bot) {
+    throw new Exception();
+});
 
 
 $botman->exception(Exception::class, function($exception, $bot) {
+    \Illuminate\Support\Facades\Log::info("Exception");
     $bot->reply('Sorry, something went wrong');
+
+    if (method_exists($bot->getDriver(), 'messagesHandled'))
+        $bot->getDriver()->messagesHandled();
 });
